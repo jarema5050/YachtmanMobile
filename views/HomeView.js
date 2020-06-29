@@ -32,8 +32,9 @@ function HomeView({route, navigation}) {
     return (
       <View style={styles.container}>
         <Text>Welcome in our app {route.params.email}!</Text>
-        <Button buttonStyle ={styles.buttonLogin} title="Make a photo" onPress={() => navigation.navigate("Camera")}></Button>
-        </View>
+        <Button buttonStyle ={styles.buttonLogin} title="Make a photo" onPress={() => navigation.navigate("Camera", {email: route.params.email, userId: route.params.userId})}></Button>
+        <Button buttonStyle ={styles.buttonRegister} title="View located images on MAPS" onPress={() => navigation.navigate("Map")}></Button>
+      </View>
     );
   }
 export default HomeView;

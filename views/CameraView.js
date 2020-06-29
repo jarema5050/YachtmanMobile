@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     }
   });
 
-export default function CameraView() {
+export default function CameraView({route}) {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [photo, setPhoto] = useState(null);
@@ -72,7 +72,7 @@ export default function CameraView() {
       );
   }
   else{
-      return <ImagesView photo={photo}/>;
+      return <ImagesView userId={route.params.userId} photo={photo}/>;
   }
   
 }

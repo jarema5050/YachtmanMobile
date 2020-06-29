@@ -1,28 +1,8 @@
 import React from 'react';
-import { Text, View, ActivityIndicator, Image, StyleSheet} from 'react-native';
+import { Text, View, ActivityIndicator, Image, StyleSheet, SliderComponent} from 'react-native';
 import * as Permissions  from 'expo-permissions';
 import * as Location from 'expo-location';
 import { Button } from 'react-native-elements';
-
-function dataURItoBlob(dataURI) {
-    // convert base64/URLEncoded data component to raw binary data held in a string
-    var byteString;
-    if (dataURI.split(',')[0].indexOf('base64') >= 0)
-        byteString = atob(dataURI.split(',')[1]);
-    else
-        byteString = unescape(dataURI.split(',')[1]);
-
-    // separate out the mime component
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-    // write the bytes of the string to a typed array
-    var ia = new Uint8Array(byteString.length);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([ia], {type:mimeString});
-}
 
 const styles = StyleSheet.create({
     container: {
@@ -68,25 +48,33 @@ export default class ImagesView extends React.Component {
     }
 
     uploadImageAndLocation = () => {
-        //var dataURL = canvas.toDataURL('image/jpeg', 0.5);
-        console.log(this.props.photo.base64);
-        var blob = dataURItoBlob(this.props.photo.base64);
-        var data = new FormData();
-        data.append("location", this.state.location);
-        data.append("file", blob);
+        console.log(JSON.stringify({
+            locationDto: this.state.location,
+            base64: this.props.photo.base64.slice(0,200),
+            userId: this.props.userId
+        }));
         fetch("https://locatedimg.azurewebsites.net/Home/AddLocatedImage", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json"
                 },
-                body: data
+                body: JSON.stringify({
+                    locationDto: this.state.location,
+                    base64: this.props.photo.base64,
+                    userId: this.props.userId
+                })
                 })
                 .then((res) => {
-                    res.json()
-                    console.log(JSON.stringify(res))
+                    console.log(JSON.stringify(res));
+                    if(res.status == "200"){
+                        alert("Successfully added photo!");
+                        this.props.navigation.goBack();
+                    }
+                    else
+                        alert("Something went wrong. Try again later.");
                 })
-                .then((res) => console.log(res))
+                .then((data) =>console.log(JSON.stringify(data)))
                 .catch((err)=>console.log(err));
 
     }
