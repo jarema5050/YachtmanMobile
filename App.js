@@ -1,20 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Socials from './components/Socials';
+import Navigation from './components/homeStack';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Socials/>
-    </View>
+    <Navigation/>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
