@@ -1,29 +1,40 @@
-import {createStackNavigator} from '@react-navigation/stack';
-import HomeView from '../views/HomeView';
-import RegisterView from '../views/RegisterView';
-import LoginView from '../views/LoginView';
-import CameraView from '../views/CameraView';
-import MapsView from '../views/MapView';
-import SingleImage from '../views/SingleImageView';
 
-import React from 'react';
+import React, {useState} from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+import BottomTabNav from './BottomTabNav';
+import DrawerNav from './DrawerNav';
+import IntroView from '../views/IntroductionView';
 import { NavigationContainer } from '@react-navigation/native';
-
-const Stack = createStackNavigator();
-
+import { View } from 'react-native';
 function homeStack(){
-    return(
-    <NavigationContainer>
-        <Stack.Navigator>
-            <Stack.Screen name="Home" component={HomeView}/>
-            <Stack.Screen name="Register" component={RegisterView}/>
-            <Stack.Screen name="Login" component={LoginView}/>
-            <Stack.Screen name="Camera" component={CameraView}/>
-            <Stack.Screen name="Map" component={MapsView}/>
-            <Stack.Screen name="Image" component={SingleImage}/>
-        </Stack.Navigator>
-    </NavigationContainer>
-    );
+
+    const [showIntro, setShowIntro] = useState(true);
+    function changeView(){
+        const getJwt = async () => {
+            try {
+              const jsonValue = await AsyncStorage.getItem('@auth_jwt')
+              return jsonValue != null ? JSON.parse(jsonValue) : null;
+            } catch(e) {
+              // error reading value
+            }
+          }
+    
+        getJwt().then((result) => {
+            if(result == null)
+                setShowIntro(true);
+            else
+                setShowIntro(false);
+        })
+    }
+    
+    if(showIntro)
+        return(<IntroView task={changeView}></IntroView>);
+    else
+        return(
+          <NavigationContainer>
+              <BottomTabNav></BottomTabNav>
+            </NavigationContainer>
+        );
 }
 
 export default homeStack;

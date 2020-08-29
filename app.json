@@ -22,7 +22,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    }
+      "supportsTablet": true,
+      "bundleIdentifier": "com.smurfs.yachtman"
+    },
+    "android": {
+      "package": "yachtmanMobile"
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
   }
 }
