@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Alert, Platform, StyleSheet, Text, View } from "react-native";
 import { Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
+import auth0 from '../services/Auth0'
 // You need to swap out the Auth0 client id and domain with the one from your Auth0 client.
 // In your Auth0 client, you need to also add a url to your authorized redirect urls.
 //
@@ -11,9 +12,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 // signed in as the "arielweinberger" account on Expo and the name/slug for this app is "with-auth0".
 //
 // You can open this app in the Expo client and check your logs to find out your redirect URL.
-
-const auth0ClientId = "hZLG9l8utsdVSYGuCrki0oYhiejuW4jW";
-const authorizationEndpoint = "https://dev-7lggsq0x.eu.auth0.com/authorize";
+const credentialsModule = require('./AuthCredentials');
+const webAuth = auth0.webAuth;
+const auth0ClientId = credentialsModule.auth0ClientId;
+const authorizationEndpoint = credentialsModule.domain + "/authorize";
 
 const useProxy = Platform.select({ web: false, default: true });
 const redirectUri = AuthSession.makeRedirectUri({ useProxy });
@@ -26,9 +28,9 @@ export default function Authentication({buttonParams, task}) {
       redirectUri,
       clientId: auth0ClientId,
       // id_token will return a JWT token
-      responseType: "id_token",
+      responseType: "token",
       // retrieve the user's profile
-      scopes: ["openid", "profile"],
+      scopes: ["openid", "profile", "email"],
       extraParams: {
         // ideally, this will be a random value
         nonce: "nonce",
@@ -41,17 +43,36 @@ export default function Authentication({buttonParams, task}) {
   // of your Auth0 application.
   console.log(`Redirect URL: ${redirectUri}`);
 
-  const storeJwt = async (value) => {
+  const storeUserData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem('@auth_jwt', jsonValue)
+      await AsyncStorage.setItem('@user_data', jsonValue)
+    } catch (e) {
+      console.log("Storing encoded data failed -"+e.message)
+    }
+  }
+  const storeToken = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('@auth_token', jsonValue)
     } catch (e) {
       console.log("Storing JWT token failed -"+e.message)
     }
   }
-
+  const fetchUserData = async (authToken) => {
+    const userData = await webAuth.client.userInfo({token:authToken}, function(err) {
+      console.log("userInfo " + err.message)
+    });
+    if (userData != null){
+      console.log(userData)
+      storeUserData(userData)
+      setName(userData.givenName)
+      task()
+    }  
+  } 
   React.useEffect(() => {
     if (result) {
+      console.log(result)
       if (result.error) {
         Alert.alert(
           "Authentication error",
@@ -60,14 +81,9 @@ export default function Authentication({buttonParams, task}) {
         return;
       }
       if (result.type === "success") {
-        // Retrieve the JWT token and decode it
-        const jwtToken = result.params.id_token;
-        const decoded = jwtDecode(jwtToken);
-        console.log(decoded);
-        const { name } = decoded;
-        storeJwt(decoded);
-        task()
-        setName(name);
+        const authToken = result.params.access_token
+        storeToken(authToken)
+        fetchUserData(authToken)
       }
     }
   }, [result]);

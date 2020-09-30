@@ -3,7 +3,6 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ListView from '../views/ListView';
 import SearchView from '../views/SearchView';
-import NotificationsView from '../views/NotificationsView';
 import MessagesView from '../views/MessagesView';
 import DrawerNav from './DrawerNav';
 
@@ -14,8 +13,8 @@ export default function BottomTabNav() {
       <Tab.Navigator>
         <Tab.Screen name="List" component={ListView} />
         <Tab.Screen name="Settings" component={SearchView} />
-        <Tab.Screen name="Notifications" component={NotificationsView} />
         <Tab.Screen name="Messages" component={MessagesView} />
+        <Tab.Screen name="Profile" component={DrawerNav} />
       </Tab.Navigator>
   );
 }
