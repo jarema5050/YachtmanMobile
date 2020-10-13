@@ -26,7 +26,7 @@
       "bundleIdentifier": "com.smurfs.yachtman"
     },
     "android": {
-      "package": "yachtmanMobile"
+      "package": "com.smurfs.yachtman"
     },
     "entryPoint": "node_modules/expo/AppEntry.js"
   }

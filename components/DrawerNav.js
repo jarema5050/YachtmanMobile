@@ -2,7 +2,6 @@ import React from 'react';
 import {
   createDrawerNavigator
 } from '@react-navigation/drawer';
-import SecondScreen from "./Profile/ProfileDrawer"
 const colors = require("../utilities/Colors")
 
 
@@ -30,7 +29,6 @@ export default function DrawerNav({screensArray, customContent}) {
         })
         
       }
-      
     </Drawer.Navigator>
     ) 
 }
