@@ -29,7 +29,7 @@ import { useForm, Controller } from 'react-hook-form';
     },
     input: {
       backgroundColor: 'white',
-      borderColor: 'none',
+      borderColor: '#000',
       height: 40,
       padding: 10,
       borderRadius: 4,

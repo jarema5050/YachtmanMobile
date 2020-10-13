@@ -3,6 +3,8 @@ PODS:
     - React
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
+  - EXApplication (2.2.1):
+    - UMCore
   - EXCamera (8.3.1):
     - UMBarCodeScannerInterface
     - UMCore
@@ -302,13 +304,13 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
     - ReactCommon/callinvoker (= 0.62.2)
-  - RNCAsyncStorage (1.12.0):
+  - RNCAsyncStorage (1.11.0):
     - React
   - RNCMaskedView (0.1.10):
     - React
   - RNGestureHandler (1.6.1):
     - React
-  - RNReanimated (1.13.0):
+  - RNReanimated (1.9.0):
     - React
   - RNScreens (2.9.0):
     - React
@@ -336,6 +338,7 @@ PODS:
 DEPENDENCIES:
   - A0Auth0 (from `../node_modules/react-native-auth0/ios`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - EXApplication (from `../node_modules/expo-application/ios`)
   - EXCamera (from `../node_modules/expo-camera/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXCrypto (from `../node_modules/expo-crypto/ios`)
@@ -348,7 +351,7 @@ DEPENDENCIES:
   - EXLocation (from `../node_modules/expo-location/ios`)
   - EXPermissions (from `../node_modules/expo-permissions/ios`)
   - EXRandom (from `../node_modules/expo-random/ios`)
-  - EXSplashScreen (from `../node_modules/expo/node_modules/expo-splash-screen/ios`)
+  - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - EXSQLite (from `../node_modules/expo-sqlite/ios`)
   - EXTaskManager (from `../node_modules/expo-task-manager/ios`)
   - EXUpdates (from `../node_modules/expo-updates/ios`)
@@ -412,6 +415,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-auth0/ios"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  EXApplication:
+    :path: "../node_modules/expo-application/ios"
   EXCamera:
     :path: "../node_modules/expo-camera/ios"
   EXConstants:
@@ -437,7 +442,7 @@ EXTERNAL SOURCES:
   EXRandom:
     :path: "../node_modules/expo-random/ios"
   EXSplashScreen:
-    :path: "../node_modules/expo/node_modules/expo-splash-screen/ios"
+    :path: "../node_modules/expo-splash-screen/ios"
   EXSQLite:
     :path: "../node_modules/expo-sqlite/ios"
   EXTaskManager:
@@ -543,6 +548,7 @@ SPEC CHECKSUMS:
   A0Auth0: 2919855112dbfadfea2c55418fa6114f274ee6de
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
+  EXApplication: d7ccb60c33fa4d506967ff6adde42a0f872d69ad
   EXCamera: efef30c8f5016b46fa3119a0c685cf75b841f453
   EXConstants: f907b3b6ce16e20d1750f22af1e095e924574bcb
   EXCrypto: 867e1d45d513e39ab9d7706232435edb1cf756cd
@@ -586,10 +592,10 @@ SPEC CHECKSUMS:
   React-RCTText: fae545b10cfdb3d247c36c56f61a94cfd6dba41d
   React-RCTVibration: 4356114dbcba4ce66991096e51a66e61eda51256
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
-  RNCAsyncStorage: 2a692bcb9b69b76a2f1a95f33db057129700af64
+  RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
+  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
   RNVectorIcons: da6fe858f5a65d7bbc3379540a889b0b12aa5976
   UMAppLoader: 61049c8d55590b74e9ae1d5429bf68d96b4a2528

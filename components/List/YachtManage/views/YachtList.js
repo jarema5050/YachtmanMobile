@@ -59,7 +59,7 @@ export default function YachtListView({navigation}) {
                 <AntDesign name="pluscircleo" size={32} color={"white"}/>
               }
               type="clear"
-              onPress={()=>{navigation.navigate()}}
+              onPress={()=>{navigation.navigate("Yacht edit")}}
             />
             <Text style={{color: "white"}}>New yacht</Text>
           </View>

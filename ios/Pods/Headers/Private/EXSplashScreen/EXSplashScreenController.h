@@ -1,1 +1,1 @@
-../../../../../node_modules/expo/node_modules/expo-splash-screen/ios/EXSplashScreen/EXSplashScreenController.h
+../../../../../node_modules/expo-splash-screen/ios/EXSplashScreen/EXSplashScreenController.h
