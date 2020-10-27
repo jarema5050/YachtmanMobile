@@ -1,20 +1,29 @@
 import React from 'react';
 //import Constants from 'expo-constants';
-import { Text, View, StyleSheet, TextInput, Button, SafeAreaView, ScrollView} from 'react-native';
+import {View, StyleSheet, Button, SafeAreaView, ScrollView} from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
-
+import NumericInput from '../../../../utilities/Forms/NumericInput';
+import FormsTextInput from '../../../../utilities/Forms/TextInput';
+import Picker from '../../../../utilities/Forms/Picker';
+import ImagePicker from '../../../../utilities/Forms/ImagePicker';
+const colors = require("../../../../utilities/Colors")
   const styles = StyleSheet.create({
     scrollView: {
-        backgroundColor: 'pink',
         marginHorizontal: 20,
     },
     label: {
       color: 'white',
-      margin: 20,
+      marginTop: 10,
+      marginBottom: 5,
       marginLeft: 0,
     },
+    labelErr: {
+      color: 'red',
+      marginTop: 10,
+      fontSize: 14
+    },
     button: {
-      marginTop: 40,
+      marginTop: 30,
       color: 'white',
       height: 40,
       backgroundColor: '#ec5990',
@@ -23,9 +32,8 @@ import { useForm, Controller } from 'react-hook-form';
     container: {
       flex: 1,
       justifyContent: 'center',
-      //paddingTop: Constants.statusBarHeight,
       padding: 8,
-      backgroundColor: '#0e101c',
+      backgroundColor: colors.brandMarine,
     },
     input: {
       backgroundColor: 'white',
@@ -34,55 +42,48 @@ import { useForm, Controller } from 'react-hook-form';
       padding: 10,
       borderRadius: 4,
     },
+    inputContainer: {
+      marginBottom: 10
+    }
   });
 
+const formData = require("../../../../utilities/Forms/FormsData")
+
 export default function YachtEditView() {
-    const { register, setValue, handleSubmit, control } = useForm();
+    const { errors, handleSubmit, control } = useForm();
+
+    const nameInputRef = React.useRef()
+    const lengthInputRef = React.useRef()
+    const capacityInputRef = React.useRef()
+    const yearInputRef = React.useRef()
+    const typeInputRef = React.useRef()
+
     const onSubmit = data => {
         console.log(data);
     };
 
     const onChange = arg => {
+      console.log(arg)
         return {
         value: arg.nativeEvent.text,
         };
     };
-
+    
+    console.log("errors", errors)
     return (
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
-          <Text style={styles.label}>First name</Text>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={value => onChange(value)}
-                value={value}
-              />
-            )}
-            name="firstName"
-          />
-          <Text style={styles.label}>Last name</Text>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={value => onChange(value)}
-                value={value}
-              />
-            )}
-            name="lastName"
-          />
-    
+          <ImagePicker></ImagePicker>
+          <FormsTextInput ref={nameInputRef} name={"Yacht name"} errors={errors} control={control} maxLength={60} required={true}></FormsTextInput>
+          <Picker ref={typeInputRef} errors={errors} control={control} data={formData.yachtTypeData} name={"Yacht type"} required={true}></Picker>
+          <NumericInput ref={lengthInputRef} name={"Yacht length"} errors={errors} control={control} maxLength={3} required={true}></NumericInput>
+          <Picker ref={yearInputRef} errors={errors} control={control} data={formData.yearFactory(1900)} name={"Year built"} required={true}></Picker>
+          <NumericInput ref={capacityInputRef} name={"Human capacity"} errors={errors} control={control} maxLength={3} required={true}></NumericInput>          
           <View style={styles.button}>
             <Button
-              style={styles.buttonInner}
+              style={styles.button}
               color
-              title="Button"
+              title="Add yacht"
               onPress={handleSubmit(onSubmit)}
             />
           </View>
