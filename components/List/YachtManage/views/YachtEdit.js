@@ -5,7 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import NumericInput from '../../../../utilities/Forms/NumericInput';
 import FormsTextInput from '../../../../utilities/Forms/TextInput';
 import Picker from '../../../../utilities/Forms/Picker';
-import ImagePicker from '../../../../utilities/Forms/ImagePicker';
+import ImagePicker from '../../../../utilities/Forms/ImageCameraModal';
 const colors = require("../../../../utilities/Colors")
   const styles = StyleSheet.create({
     scrollView: {
@@ -49,7 +49,7 @@ const colors = require("../../../../utilities/Colors")
 
 const formData = require("../../../../utilities/Forms/FormsData")
 
-export default function YachtEditView() {
+export default function YachtEditView({ navigation }) {
     const { errors, handleSubmit, control } = useForm();
 
     const nameInputRef = React.useRef()
@@ -73,7 +73,7 @@ export default function YachtEditView() {
     return (
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
-          <ImagePicker></ImagePicker>
+          <ImagePicker navigation={navigation}></ImagePicker>
           <FormsTextInput ref={nameInputRef} name={"Yacht name"} errors={errors} control={control} maxLength={60} required={true}></FormsTextInput>
           <Picker ref={typeInputRef} errors={errors} control={control} data={formData.yachtTypeData} name={"Yacht type"} required={true}></Picker>
           <NumericInput ref={lengthInputRef} name={"Yacht length"} errors={errors} control={control} maxLength={3} required={true}></NumericInput>

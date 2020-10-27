@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements';
 import { FontAwesome5 } from '@expo/vector-icons';
 import YachtList from "./views/YachtList"
 import YachtEditView from './views/YachtEdit';
+import Camera from '../../../utilities/Forms/Camera';
 const styles = StyleSheet.create({
     hamburgerBtn: {
         backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -43,6 +44,9 @@ export default function YachtManageStack({navigation}) {
               type = "clear"
             />
           )
+        }}/>
+        <Stack.Screen name="Take a photo" component={Camera} options={{
+          headerShown: false
         }}/>
     </Stack.Navigator>
 

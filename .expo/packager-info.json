@@ -2,9 +2,9 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 78156,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "packagerPid": 83772,
+  "expoServerNgrokUrl": "https://q2-mh7.jarema5050.yachtmanmobile.exp.direct",
+  "packagerNgrokUrl": "https://packager.q2-mh7.jarema5050.yachtmanmobile.exp.direct",
+  "ngrokPid": 83796,
   "webpackServerPort": null
 }
