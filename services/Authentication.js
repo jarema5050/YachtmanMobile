@@ -19,7 +19,20 @@ const authorizationEndpoint = credentialsModule.domain + "/authorize";
 
 const useProxy = Platform.select({ web: false, default: true });
 const redirectUri = AuthSession.makeRedirectUri({ useProxy });
+/*
+function base64URLEncode(str) {
+  return str.toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+}
+var verifier = base64URLEncode(crypto.randomBytes(32));
 
+function sha256(buffer) {
+  return crypto.createHash('sha256').update(buffer).digest();
+}
+var challenge = base64URLEncode(sha256(verifier));
+*/
 export default function Authentication({buttonParams, task}) {
   const [name, setName] = React.useState(null);
 
@@ -35,8 +48,12 @@ export default function Authentication({buttonParams, task}) {
         // ideally, this will be a random value
         nonce: "nonce",
       },
+//      codeChallenge: challenge,
+//      codeChallengeMethod: "S256",
+
+
     },
-    { authorizationEndpoint }
+    { authorizationEndpoint },
   );
 
   // Retrieve the redirect URL, add this to the callback URL list
@@ -82,6 +99,7 @@ export default function Authentication({buttonParams, task}) {
       }
       if (result.type === "success") {
         const authToken = result.params.access_token
+        console.log("authTokeni", authToken)
         storeToken(authToken)
         fetchUserData(authToken)
       }

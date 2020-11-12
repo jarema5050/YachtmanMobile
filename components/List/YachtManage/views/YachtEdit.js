@@ -49,7 +49,7 @@ const colors = require("../../../../utilities/Colors")
 
 const formData = require("../../../../utilities/Forms/FormsData")
 
-export default function YachtEditView({ navigation }) {
+export default function YachtEditView({ navigation , route }) {
     const { errors, handleSubmit, control } = useForm();
 
     const nameInputRef = React.useRef()
@@ -73,7 +73,7 @@ export default function YachtEditView({ navigation }) {
     return (
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
-          <ImagePicker navigation={navigation}></ImagePicker>
+          <ImagePicker navigation={navigation} route={route}></ImagePicker>
           <FormsTextInput ref={nameInputRef} name={"Yacht name"} errors={errors} control={control} maxLength={60} required={true}></FormsTextInput>
           <Picker ref={typeInputRef} errors={errors} control={control} data={formData.yachtTypeData} name={"Yacht type"} required={true}></Picker>
           <NumericInput ref={lengthInputRef} name={"Yacht length"} errors={errors} control={control} maxLength={3} required={true}></NumericInput>

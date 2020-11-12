@@ -3,6 +3,8 @@ import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Camera } from 'expo-camera';
 import { Button } from 'react-native-elements';
 import { Entypo } from '@expo/vector-icons'; 
+import ImagesView from "./ImagesView";
+import { brandMarine } from '../Colors';
 
 const colors = require("../Colors")
 
@@ -12,7 +14,7 @@ const styles = StyleSheet.create({
     }
   });
 
-export default function CameraView({route}) {
+export default function CameraView({navigation, route}) {
 var camera;
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -28,10 +30,11 @@ var camera;
         if (camera) {
         let photo = await camera.takePictureAsync({base64: true});
         setPhoto(photo);
-        console.log(JSON.stringify(photo));
         }
     };
-
+    const newPhotoFunc = () => {
+        setPhoto(null)
+    }
   if (hasPermission === null) {
     return <View />;
   }
@@ -76,7 +79,7 @@ var camera;
                     onPress={() => {
                     snap()
                     }}>
-                    <Entypo name="circle" size={48} color="white" />
+                    <Entypo name="circle" size={48} color={colors.brandOrange} />
             </TouchableOpacity>
           </View> 
         </Camera>
@@ -85,4 +88,7 @@ var camera;
       );
   }
   
+  else{
+    return <ImagesView navigation={navigation} discardFunc={newPhotoFunc} photo={photo}/>;
+}
 }

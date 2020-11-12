@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+//import React, { useState } from "react";
 import { View, StyleSheet, Button, Alert } from "react-native";
-import { AsyncStorage } from 'react-native';
+//import { AsyncStorage } from 'react-native';
 import auth0 from '../services/Auth0'
 
-const credentialsModule = require('../services/AuthCredentials');
+//const credentialsModule = require('../services/AuthCredentials');
 const auth = auth0.auth;
 const changePassword = async (userData) => {
     try{

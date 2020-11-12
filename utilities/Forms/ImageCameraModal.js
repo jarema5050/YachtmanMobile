@@ -1,11 +1,25 @@
-import React, { Component } from 'react'
-import { Text, TouchableOpacity, TouchableHighlight, View, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { Text, TouchableOpacity, TouchableHighlight, View, StyleSheet, ImageBackground } from 'react-native'
+import { Button } from 'react-native-elements';
 import Modal from 'react-native-modal'
 import ImagePicker from "../Forms/ImagePicker"
+import { Feather } from '@expo/vector-icons'; 
  // 4.1.1
  const colors = require("../Colors")
  const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: "center",height: 130, backgroundColor: colors.brandOrange, alignItems: "center" },
+    trashButton: {
+        backgroundColor: "red",
+        borderRadius: 20,
+        width: 40,
+        margin: 10,
+        alignSelf: "flex-end"
+    },
+    imageContainer: {
+        flex: 1,
+        justifyContent: "flex-end",
+        height: 130
+    },
+    container: { flex: 1, justifyContent: "center", height: 130, backgroundColor: colors.brandOrange, alignItems: "center" },
     text: {fontSize: 24, color: "white", fontWeight: "600"},
     modal: {backgroundColor:"white"},
     view: {display: "flex"},
@@ -49,36 +63,65 @@ import ImagePicker from "../Forms/ImagePicker"
       }
 })
 
-export default class ModalTester extends Component {
-  state = {
-    isModalVisible: false
+export default function ImageCameraModal({navigation, route}) {
+
+const image = (typeof route.params != "undefined") ? route.params.image : null;
+console.log(image)    
+  const [isModalVisible, toggleModal] = useState(false);
+    //console.log("received",image)
+  const [imageUri, setImageUri] = useState(image);
+    console.log(imageUri)
+
+  const showImageCallback = (uri) => 
+  {
+    toggleModal(false)
+    setImageUri(uri)
   }
   
-  _showModal = () => this.setState({ isModalVisible: true })
- 
-  _hideModal = () => this.setState({ isModalVisible: false })
- 
-  render () {
+
+  let MainView;
+    //console.log(receivedPhoto.imageUri)
+    if(imageUri != null){
+        MainView =
+        () => {return (
+        <ImageBackground source={{ uri: imageUri }} style={styles.imageContainer}>
+            <Button
+            icon={
+                <Feather name="trash-2" size={24} color="white" />
+            }
+            buttonStyle={styles.trashButton}
+            onPress={()=>{showImageCallback(null)}}
+            />
+        </ImageBackground>
+        )};
+    }
+    else{
+        MainView = () => { return (
+            <TouchableOpacity style={styles.container} onPress={() => {toggleModal(true)}}>
+                <Text style={styles.text}>Add new photo</Text>
+            </TouchableOpacity>
+        )};
+    }
+
     return (
       <View style={styles.view}>
-        <TouchableOpacity style={styles.container} onPress={this._showModal}>
-          <Text style={styles.text}>Add new photo</Text>
-        </TouchableOpacity>
+        <MainView></MainView>
         <Modal
         animationType="slide"
         transparent={true}
-        visible={this.state.isModalVisible}
+        visible={isModalVisible}
         onRequestClose={() => {
           Alert.alert("Modal has been closed.");
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <ImagePicker></ImagePicker>
+            <ImagePicker hideModal={toggleModal} callbackFunc={showImageCallback}></ImagePicker>
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "gray" }}
               onPress={() => {
-                this.props.navigation.navigate("Take a photo")
+                toggleModal(false)
+                navigation.navigate("Take a photo")
               }}
             >
               <Text style={styles.textStyle}>Take a photo</Text>
@@ -86,7 +129,7 @@ export default class ModalTester extends Component {
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
               onPress={() => {
-                this._hideModal();
+                toggleModal(false)
               }}
             >
               <Text style={styles.textStyle}>Hide Modal</Text>
@@ -96,5 +139,4 @@ export default class ModalTester extends Component {
       </Modal>
       </View>
     )
-  }
 }
