@@ -42,6 +42,7 @@ export default React.forwardRef((props, ref) => {
                   onChangeText={value => onChange(value)}
                   value={value}
                   ref={ref}
+                  editable={props.editable}
                 />
               )}
 

@@ -43,6 +43,7 @@ export default React.forwardRef((props, ref) => {
                   value={value}
                   keyboardType={"number-pad"}
                   ref={ref}
+                  editable={props.editable}
                 />
               )}
               rules={{

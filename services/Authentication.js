@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { Alert, Platform, StyleSheet, Text, View } from "react-native";
 import { Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
-import auth0 from '../services/Auth0'
+import auth0 from '../services/Auth0';
+import * as Crypto from 'expo-crypto';
 // You need to swap out the Auth0 client id and domain with the one from your Auth0 client.
 // In your Auth0 client, you need to also add a url to your authorized redirect urls.
 //
@@ -19,20 +20,32 @@ const authorizationEndpoint = credentialsModule.domain + "/authorize";
 
 const useProxy = Platform.select({ web: false, default: true });
 const redirectUri = AuthSession.makeRedirectUri({ useProxy });
-/*
+
 function base64URLEncode(str) {
   return str.toString('base64')
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
       .replace(/=/g, '');
 }
-var verifier = base64URLEncode(crypto.randomBytes(32));
 
-function sha256(buffer) {
-  return crypto.createHash('sha256').update(buffer).digest();
+function randomBytes(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 }
+
+var verifier = base64URLEncode(randomBytes(32));
+
+async function sha256(buffer) {
+  return await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, buffer);
+}
+
 var challenge = base64URLEncode(sha256(verifier));
-*/
+
 export default function Authentication({buttonParams, task}) {
   const [name, setName] = React.useState(null);
 
@@ -41,17 +54,16 @@ export default function Authentication({buttonParams, task}) {
       redirectUri,
       clientId: auth0ClientId,
       // id_token will return a JWT token
-      responseType: "token",
+      responseType: "code",
       // retrieve the user's profile
       scopes: ["openid", "profile", "email"],
       extraParams: {
         // ideally, this will be a random value
         nonce: "nonce",
+        audience: "https://dev-7lggsq0x.eu.auth0.com/api/v2/"
       },
-//      codeChallenge: challenge,
-//      codeChallengeMethod: "S256",
-
-
+      codeChallenge: challenge,
+      codeChallengeMethod: "S256",
     },
     { authorizationEndpoint },
   );
@@ -86,7 +98,23 @@ export default function Authentication({buttonParams, task}) {
       setName(userData.givenName)
       task()
     }  
-  } 
+  }
+
+  var requestJWT = require("request");
+
+  var options = {
+    method: 'POST',
+    url: credentialsModule.domain + '/oauth/token',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    form: {
+      grant_type:"authorization_code",
+      client_id: auth0ClientId,
+      code_verifier: verifier,
+      //code: "AUTHORIZATION_CODE",
+      //redirect_uri: "https://YOUR_APP/callback"
+    }
+  };
+
   React.useEffect(() => {
     if (result) {
       console.log(result)
@@ -100,8 +128,14 @@ export default function Authentication({buttonParams, task}) {
       if (result.type === "success") {
         const authToken = result.params.access_token
         console.log("authTokeni", authToken)
-        storeToken(authToken)
-        fetchUserData(authToken)
+        //storeToken(authToken)
+        //fetchUserData(authToken)
+        options.form.code = result.params.code
+        requestJWT(options, function (error, response, body) {
+          if (error) throw new Error(error);
+          console.log(response);
+          console.log(body);
+        });
       }
     }
   }, [result]);

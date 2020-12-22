@@ -25,8 +25,6 @@ export default function ImPicker({callbackFunc, hideModal}) {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
       callbackFunc(result.uri);
     }

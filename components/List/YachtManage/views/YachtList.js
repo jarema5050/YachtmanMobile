@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Button } from 'react-native-elements';
 
@@ -38,17 +38,25 @@ const DATA = [
   },
 ];
 
-const Item = ({ title }) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </View>
-);
-
 export default function YachtListView({navigation}) {
-  const renderItem = ({ item }) => (
-    <Item title={item.title} />
-  );
 
+  let onPressItem = (id) => {
+    navigation.navigate("Yacht edit", {
+      itemId: id,
+    });
+  }
+  
+  const Item = ({ title, id}) => (
+  <TouchableOpacity style={styles.item} onPress={onPressItem(id)}>
+    <Text style={styles.title}>{title}</Text>
+  </TouchableOpacity>
+  );  
+
+  const renderItem = ({ item }) => (
+    <Item title={item.title} id={item.id}/>
+  );
+  
+  
   return (
     <SafeAreaView style={styles.container}>
       <FlatList 

@@ -4,6 +4,7 @@ import { Button } from 'react-native-elements';
 import Modal from 'react-native-modal'
 import ImagePicker from "../Forms/ImagePicker"
 import { Feather } from '@expo/vector-icons'; 
+import { onChange } from 'react-native-reanimated';
  // 4.1.1
  const colors = require("../Colors")
  const styles = StyleSheet.create({
@@ -63,7 +64,7 @@ import { Feather } from '@expo/vector-icons';
       }
 })
 
-export default function ImageCameraModal({navigation, route}) {
+export default function ImageCameraModal({navigation, route, editable, onChange}) {
 
 const image = (typeof route.params != "undefined") ? route.params.image : null;
 console.log(image)    
@@ -76,15 +77,19 @@ console.log(image)
   {
     toggleModal(false)
     setImageUri(uri)
+    //onChange(uri)
   }
   
 
   let MainView;
-    //console.log(receivedPhoto.imageUri)
+  
     if(imageUri != null){
         MainView =
         () => {return (
         <ImageBackground source={{ uri: imageUri }} style={styles.imageContainer}>
+
+          {
+            editable &&
             <Button
             icon={
                 <Feather name="trash-2" size={24} color="white" />
@@ -92,6 +97,7 @@ console.log(image)
             buttonStyle={styles.trashButton}
             onPress={()=>{showImageCallback(null)}}
             />
+          }
         </ImageBackground>
         )};
     }

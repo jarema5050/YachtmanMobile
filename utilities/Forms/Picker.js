@@ -29,6 +29,18 @@ const styles = StyleSheet.create({
 
 
 export default React.forwardRef((props, ref) => {
+    
+    if(props.editable == false) {
+      return(<View style={styles.inputContainer}>
+        <Text style={styles.label}>{props.name}</Text>
+        <TextInput
+          style={styles.input}
+          value={""}
+          editable={props.editable}
+        />
+      </View>);
+    }
+
     return(
         <View style={styles.inputContainer}>
             <Text style={styles.label}>{props.name}</Text>
