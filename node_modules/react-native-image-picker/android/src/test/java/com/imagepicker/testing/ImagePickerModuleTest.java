@@ -45,7 +45,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @RunWith(RobolectricTestRunner.class)
 @SuppressStaticInitializationFor("com.facebook.react.common.build.ReactBuildConfig")
 @PrepareForTest({Arguments.class})
-@PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "jdk.internal.reflect.*"})
+@PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*"})
+@Config(manifest = Config.NONE)
 public class ImagePickerModuleTest
 {
     private static final int DEFAULT_THEME = R.style.DefaultExplainingPermissionsTheme;

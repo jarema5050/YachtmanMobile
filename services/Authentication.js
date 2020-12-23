@@ -100,20 +100,18 @@ export default function Authentication({buttonParams, task}) {
     }  
   }
 
-  var requestJWT = require("request");
-
-  var options = {
-    method: 'POST',
-    url: credentialsModule.domain + '/oauth/token',
-    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    form: {
-      grant_type:"authorization_code",
-      client_id: auth0ClientId,
-      code_verifier: verifier,
-      //code: "AUTHORIZATION_CODE",
-      //redirect_uri: "https://YOUR_APP/callback"
-    }
-  };
+  async function postData(url = '', data = {}) {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        //'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+    return response.json(); // parses JSON response into native JavaScript objects
+  }
 
   React.useEffect(() => {
     if (result) {
@@ -130,12 +128,19 @@ export default function Authentication({buttonParams, task}) {
         console.log("authTokeni", authToken)
         //storeToken(authToken)
         //fetchUserData(authToken)
-        options.form.code = result.params.code
-        requestJWT(options, function (error, response, body) {
-          if (error) throw new Error(error);
-          console.log(response);
-          console.log(body);
+        //options.form.code = result.params.code
+        const data = {
+          grant_type:"authorization_code",
+          client_id: auth0ClientId,
+          code_verifier: verifier,
+          code: result.params.code,
+          redirect_uri: redirectUri
+        }
+
+        postData(credentialsModule.domain + '/oauth/token', data).then(response => {
+          console.log(response); // JSON data parsed by `data.json()` call
         });
+
       }
     }
   }, [result]);
