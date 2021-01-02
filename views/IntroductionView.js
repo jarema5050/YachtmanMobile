@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     }
   });
 
-function IntroductionView({route, navigation, task}) {
+function IntroductionView({route, navigation, refresh}) {
     
     return (
         <View style={styles.container}>
@@ -69,7 +69,7 @@ function IntroductionView({route, navigation, task}) {
                         styleBtnTitle: styles.buttonProceedTitle,
                         titleTxt: "Start your travel"
                     }
-                } task={task}>
+                } refresh={refresh}>
                 </Authentication>
             </View>
         </View>

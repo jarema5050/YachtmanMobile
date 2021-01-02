@@ -38,7 +38,7 @@ function homeStack(){
     
     
     if(showIntro)
-        return(<IntroView task={changeView}></IntroView>);
+        return(<IntroView refresh={changeView}></IntroView>);
     else
        return(
         <LoginContext.Provider value={{logoutFunc: logoutEffect}}>

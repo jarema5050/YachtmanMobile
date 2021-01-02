@@ -1,11 +1,12 @@
+/* Adapted from expo/examples/with-auth0 */
 import * as AuthSession from "expo-auth-session";
 import jwtDecode from "jwt-decode";
-import React, { useState } from "react";
+import * as React from "react";
 import { Alert, Platform, StyleSheet, Text, View } from "react-native";
-import { Button } from 'react-native-elements';
+import LoadingModal from "../views/LoadingModal";
 import AsyncStorage from '@react-native-community/async-storage';
-import auth0 from '../services/Auth0';
-import * as Crypto from 'expo-crypto';
+import { Button } from 'react-native-elements';
+
 // You need to swap out the Auth0 client id and domain with the one from your Auth0 client.
 // In your Auth0 client, you need to also add a url to your authorized redirect urls.
 //
@@ -14,152 +15,126 @@ import * as Crypto from 'expo-crypto';
 //
 // You can open this app in the Expo client and check your logs to find out your redirect URL.
 const credentialsModule = require('./AuthCredentials');
-const webAuth = auth0.webAuth;
+
 const auth0ClientId = credentialsModule.auth0ClientId;
+const auth0_domain = credentialsModule.domain;
 const authorizationEndpoint = credentialsModule.domain + "/authorize";
 
 const useProxy = Platform.select({ web: false, default: true });
-const redirectUri = AuthSession.makeRedirectUri({ useProxy });
 
-function base64URLEncode(str) {
-  return str.toString('base64')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
-}
+export default class LoginPage extends React.Component {
+    state = {
+        name: null,        // user's name
+        loading: false     // decides whether to show the loading modal
+    };
 
-function randomBytes(length) {
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-     result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
+    signIn = async () => {
+        // prepares the login request.
+        this.setState({loading: true});
+        const redirectUri = AuthSession.makeRedirectUri({ useProxy });
+        const authenticationOptions = {
+            redirectUri: redirectUri,
+            responseType: 'code',
+            codeChallengeMethod: 'S256',
+            clientId: auth0ClientId,
+            scopes: ["openid", "profile", "offline_access"],
+            audience: "https://dev-7lggsq0x.eu.auth0.com/api/v2/",
+            extraParams: {
+                // ideally, this will be a random value
+                nonce: "nonce",
+                prompt: "login",
+            },
+        };
+        const discovery = await AuthSession.fetchDiscoveryAsync(auth0_domain);
+        const request = await AuthSession.loadAsync(authenticationOptions, discovery);
+        const code_verifier = request.codeVerifier;
 
-var verifier = base64URLEncode(randomBytes(32));
-
-async function sha256(buffer) {
-  return await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, buffer);
-}
-
-var challenge = base64URLEncode(sha256(verifier));
-
-export default function Authentication({buttonParams, task}) {
-  const [name, setName] = React.useState(null);
-
-  const [request, result, promptAsync] = AuthSession.useAuthRequest(
-    {
-      redirectUri,
-      clientId: auth0ClientId,
-      // id_token will return a JWT token
-      responseType: "code",
-      // retrieve the user's profile
-      scopes: ["openid", "profile", "email"],
-      extraParams: {
-        // ideally, this will be a random value
-        nonce: "nonce",
-        audience: "https://dev-7lggsq0x.eu.auth0.com/api/v2/"
-      },
-      codeChallenge: challenge,
-      codeChallengeMethod: "S256",
-    },
-    { authorizationEndpoint },
-  );
-
-  // Retrieve the redirect URL, add this to the callback URL list
-  // of your Auth0 application.
-  console.log(`Redirect URL: ${redirectUri}`);
-
-  const storeUserData = async (value) => {
-    try {
-      const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem('@user_data', jsonValue)
-    } catch (e) {
-      console.log("Storing encoded data failed -"+e.message)
-    }
-  }
-  const storeToken = async (value) => {
-    try {
-      const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem('@auth_token', jsonValue)
-    } catch (e) {
-      console.log("Storing JWT token failed -"+e.message)
-    }
-  }
-  const fetchUserData = async (authToken) => {
-    const userData = await webAuth.client.userInfo({token:authToken}, function(err) {
-      console.log("userInfo " + err.message)
-    });
-    if (userData != null){
-      console.log(userData)
-      storeUserData(userData)
-      setName(userData.givenName)
-      task()
-    }  
-  }
-
-  async function postData(url = '', data = {}) {
-    // Default options are marked with *
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        //'Content-Type': 'application/json'
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
-  }
-
-  React.useEffect(() => {
-    if (result) {
-      console.log(result)
-      if (result.error) {
-        Alert.alert(
-          "Authentication error",
-          result.params.error_description || "something went wrong"
-        );
-        return;
-      }
-      if (result.type === "success") {
-        const authToken = result.params.access_token
-        console.log("authTokeni", authToken)
-        //storeToken(authToken)
-        //fetchUserData(authToken)
-        //options.form.code = result.params.code
-        const data = {
-          grant_type:"authorization_code",
-          client_id: auth0ClientId,
-          code_verifier: verifier,
-          code: result.params.code,
-          redirect_uri: redirectUri
+        // prompts the user for login
+        this.setState({loading: false});
+        const code_response = await request.promptAsync(null, { useProxy });
+        if (!code_response || !code_response.params || !code_response.params.code ) {
+            Alert.alert("Server Error", "Something wrong happened when retrieving your credentials. Please try again soon.");
+            return;
+        } else if (!code_response.params.state || code_response.params.state != request.state) {
+            Alert.alert("Server Error", "Could not verify the authenticity of the login server. Please try again soon.")
         }
 
-        postData(credentialsModule.domain + '/oauth/token', data).then(response => {
-          console.log(response); // JSON data parsed by `data.json()` call
-        });
+        // gets token from the server
+        this.setState({loading: true});
+        const access_token_req = {
+            clientId: auth0ClientId,
+            code: code_response.params.code,
+            redirectUri: redirectUri,
+            scopes: ["openid", "profile", "offline_access"],
+            extraParams: {
+                "code_verifier": code_verifier
+            }
+        };
+        const token_response = await AuthSession.exchangeCodeAsync(access_token_req, discovery);
+        const {accessToken, idToken, refreshToken, issuedAt, expiresIn} = token_response;
+        
+        console.log(idToken);
+        // Retrieve the JWT token and decode it
+        const decoded = jwtDecode(idToken);
+        const { name } = decoded;
+        console.log(decoded);
+        const storeUserData = async (value) => {
+          try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@user_data', jsonValue)
+          } catch (e) {
+            console.log("Storing encoded data failed -"+e.message)
+          }
+        }
+        const storeToken = async (value) => {
+          try {
+            //const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@auth_token', value)
+          } catch (e) {
+            console.log("Storing JWT token failed -"+e.message)
+          }
+        }
 
-      }
+        const storeInAsyncStorage = async (key, value) => {
+          try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem(key, value)
+          } catch (e) {
+            console.log(`Storing ${key} failed -`+e.message)
+          }
+        }
+
+
+        storeToken(idToken);
+        storeUserData(decoded);
+        storeInAsyncStorage("id_token", idToken);
+        storeInAsyncStorage("access_token", accessToken);
+        storeInAsyncStorage("expire_time", (issuedAt + expiresIn).toString());
+        storeInAsyncStorage("refresh_token", refreshToken);
+
+        this.setState({name, loading: false});
+        this.props.refresh();
     }
-  }, [result]);
 
-  return (
-    <View>
-      {name ? (
-        <Text style={styles.containerBottom}>You are logged in, {name}!</Text>
-      ) : (
-        <Button
-          disabled={!request}
-          buttonStyle ={buttonParams.styleBtnBody}
-          titleStyle = {buttonParams.styleBtnTitle}
-          title= {buttonParams.titleTxt}
-          onPress={() => promptAsync({ useProxy })}
-        />
-      )}
-    </View>
-  );
+    render() {
+        return (
+            <View>
+                <LoadingModal loading={this.state.loading}/>
+                {this.state.name ? (
+                    <Text style={styles.title}>You are logged in, {this.state.name}!</Text>
+                ) : (
+                    <Button
+                      buttonStyle ={this.props.buttonParams.styleBtnBody}
+                      titleStyle = {this.props.buttonParams.styleBtnTitle}
+                      title= {this.props.buttonParams.titleTxt}
+                      onPress={this.signIn}
+                    />
+                    
+                )}
+            </View>
+        );
+    }
+
 }
 
 const styles = StyleSheet.create({
