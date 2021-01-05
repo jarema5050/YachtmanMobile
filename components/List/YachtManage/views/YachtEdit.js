@@ -62,7 +62,7 @@ export default function YachtEditView({ navigation , route }) {
     var imageUri;
     const [mode, setMode] = useState(viewModes.create);
     const [data, setData] = useState(null);
-    const { itemId, initializeMode } = route.params;
+    //const { itemId, initializeMode} = route.params;
     const { errors, handleSubmit, control, setValue } = useForm();
 
     const nameInputRef = React.useRef()
@@ -80,11 +80,11 @@ export default function YachtEditView({ navigation , route }) {
     }
 
     const setValues = (dataObj) => {
-      setValue(formTitles.yachtName, dataObj.name);
-      setValue(formTitles.yachtType, dataObj.type);
-      setValue(formTitles.yachtLength, dataObj.length);
-      setValue(formTitles.yearBuilt, dataObj.year);
-      setValue(formTitles.humanCapacity, dataObj.capacity);
+      //setValue(formTitles.yachtName, dataObj.name);
+      //setValue(formTitles.yachtType, dataObj.type);
+      //setValue(formTitles.yachtLength, dataObj.length);
+      //setValue(formTitles.yearBuilt, dataObj.year);
+      //setValue(formTitles.humanCapacity, dataObj.capacity);
     }
     
     useEffect(() => {
@@ -97,7 +97,7 @@ export default function YachtEditView({ navigation , route }) {
         capacity: "10"
       }
       //setValues(testObj);
-      setMode(viewModes.create);
+      //setMode(viewModes.edit);
     });
 
     useLayoutEffect(() => {
@@ -122,13 +122,9 @@ export default function YachtEditView({ navigation , route }) {
         }
         console.log(data);
     };
-
-    const onChange = arg => {
-      imageUri = arg
-    };
     
     const onChangeImage = arg => {
-      
+      imageUri = arg
     };
 
 
@@ -144,7 +140,8 @@ export default function YachtEditView({ navigation , route }) {
           <Picker ref={yearInputRef} errors={errors} control={control} data={formData.yearFactory(1900)} name={formTitles.yearBuilt} required={true} editable={editable}></Picker>
           <NumericInput ref={capacityInputRef} name={formTitles.humanCapacity} errors={errors} control={control} maxLength={3} required={true} editable={editable}></NumericInput>
 
-          { editable && 
+          { 
+            editable && 
             <View style={styles.button}>
               <Button
                 buttonStyle={styles.button}

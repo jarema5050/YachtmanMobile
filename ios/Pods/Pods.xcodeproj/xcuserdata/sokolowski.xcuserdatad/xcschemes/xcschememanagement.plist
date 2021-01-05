@@ -54,6 +54,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>EXImagePicker.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>EXKeepAwake.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -74,12 +79,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>EXRandom.xcscheme</key>
+		<key>EXSQLite.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>EXSQLite.xcscheme</key>
+		<key>EXSecureStore.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -149,6 +154,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>RNOS.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>RNReanimated.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -160,6 +170,11 @@
 			<false/>
 		</dict>
 		<key>RNVectorIcons.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>React-Core-AccessibilityResources.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -219,6 +234,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>React-callinvoker.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>React-cxxreact.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -245,6 +265,11 @@
 			<false/>
 		</dict>
 		<key>ReactCommon.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>TcpSockets.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -339,7 +364,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>react-native-pkce-challenge.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>react-native-randombytes.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>react-native-safe-area-context.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>react-native-udp.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

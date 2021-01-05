@@ -24,8 +24,8 @@ export default function DrawerNav({screensArray, customContent}) {
       }}
       >
       {
-        screensArray.map((screen) => {
-          return <Drawer.Screen name={screen.name} component={screen.component}/>
+        screensArray.map((screen, i) => {
+          return <Drawer.Screen key={i} name={screen.name} component={screen.component}/>
         })
         
       }

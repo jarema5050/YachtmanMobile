@@ -41,13 +41,14 @@ const DATA = [
 export default function YachtListView({navigation}) {
 
   let onPressItem = (id) => {
-    navigation.navigate("Yacht edit", {
-      itemId: id,
-    });
+    //navigation.navigate("Yacht edit", {
+    //  itemId: id,
+    //});
+    navigation.navigate("Yacht edit");
   }
   
   const Item = ({ title, id}) => (
-  <TouchableOpacity style={styles.item} onPress={onPressItem(id)}>
+  <TouchableOpacity style={styles.item} onPress={()=>{onPressItem(id)}}>
     <Text style={styles.title}>{title}</Text>
   </TouchableOpacity>
   );  
@@ -67,7 +68,9 @@ export default function YachtListView({navigation}) {
                 <AntDesign name="pluscircleo" size={32} color={"white"}/>
               }
               type="clear"
-              onPress={()=>{navigation.navigate("Yacht edit")}}
+              onPress={()=>{
+               navigation.navigate("Yacht edit");
+              }}
             />
             <Text style={{color: "white"}}>New yacht</Text>
           </View>

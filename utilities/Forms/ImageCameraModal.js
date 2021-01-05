@@ -64,26 +64,29 @@ import { onChange } from 'react-native-reanimated';
       }
 })
 
-export default function ImageCameraModal({navigation, route, editable, onChange}) {
+export default function ImageCameraModal({navigation, route, editable, cameraUri, onChange}) {
 
-const image = (typeof route.params != "undefined") ? route.params.image : null;
-console.log(image)    
+  var image = (typeof route.params != "undefined") ? route.params.image : null;
+
+//console.log(image)    
   const [isModalVisible, toggleModal] = useState(false);
-    //console.log("received",image)
-  const [imageUri, setImageUri] = useState(image);
-    console.log(imageUri)
-
+  //console.log("received", image)
+  const [imageUri, setImageUri] = (typeof route.params != "undefined") ? useState(route.params.image) : useState(null);
+  console.log(imageUri)
   const showImageCallback = (uri) => 
   {
+    console.log("21342545")
     toggleModal(false)
+    image = null;
+    console.log("uri",uri)
     setImageUri(uri)
     //onChange(uri)
   }
   
-
   let MainView;
   
     if(imageUri != null){
+      console.log(1)
         MainView =
         () => {return (
         <ImageBackground source={{ uri: imageUri }} style={styles.imageContainer}>
@@ -101,7 +104,26 @@ console.log(image)
         </ImageBackground>
         )};
     }
+    else if(imageUri == null && image != null) {
+      console.log(2)
+      MainView =
+        () => {return (
+        <ImageBackground source={{ uri: image }} style={styles.imageContainer}>
+
+          {
+            editable &&
+            <Button
+            icon={
+                <Feather name="trash-2" size={24} color="white" />
+            }
+            buttonStyle={styles.trashButton}
+            onPress={()=>{showImageCallback(null)}}
+            />
+          }
+        </ImageBackground>)}
+    }
     else{
+      console.log(3)
         MainView = () => { return (
             <TouchableOpacity style={styles.container} onPress={() => {toggleModal(true)}}>
                 <Text style={styles.text}>Add new photo</Text>

@@ -73,11 +73,13 @@ export default class LoginPage extends React.Component {
         const token_response = await AuthSession.exchangeCodeAsync(access_token_req, discovery);
         const {accessToken, idToken, refreshToken, issuedAt, expiresIn} = token_response;
         
-        console.log(idToken);
+        console.log("accesstoken", token_response);
         // Retrieve the JWT token and decode it
         const decoded = jwtDecode(idToken);
+        //const accessDecoded = jwtDecode(accessToken);
         const { name } = decoded;
         console.log(decoded);
+
         const storeUserData = async (value) => {
           try {
             const jsonValue = JSON.stringify(value)
@@ -86,6 +88,7 @@ export default class LoginPage extends React.Component {
             console.log("Storing encoded data failed -"+e.message)
           }
         }
+        
         const storeToken = async (value) => {
           try {
             //const jsonValue = JSON.stringify(value)
