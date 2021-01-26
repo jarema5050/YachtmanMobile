@@ -4,14 +4,7 @@ import {View, StyleSheet, SafeAreaView, ScrollView, Text} from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import NumericInput from '../../../../utilities/Forms/NumericInput';
 import FormsTextInput from '../../../../utilities/Forms/TextInput';
-import Picker from '../../../../utilities/Forms/Picker';
-import CalendarPicker from 'react-native-calendar-picker';
-import Calendar from '../../../../utilities/Forms/Calendar'
 import { Button } from 'react-native-elements';
-import DatePicker from 'react-native-datepicker'
-import FormsData from '../../../../utilities/Forms/FormsData';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import GooglePlacesInput from '../../../../services/GooglePlacesAutocomplete';
 
 const colors = require("../../../../utilities/Colors")
 
@@ -140,8 +133,7 @@ export default function CruiseEditView({ navigation , route }) {
           <ScrollView style={styles.scrollView}>
           <FormsTextInput ref={nameInputRef} name={formTitles.from} errors={errors} control={control} maxLength={60} required={true} editable={editable}></FormsTextInput>
           <FormsTextInput ref={nameInputRef} name={formTitles.to} errors={errors} control={control} maxLength={60} required={true} editable={editable}></FormsTextInput>
-         <GooglePlacesInput></GooglePlacesInput>
-         
+        
          
 
           { 
