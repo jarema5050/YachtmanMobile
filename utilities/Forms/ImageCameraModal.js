@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { Text, TouchableOpacity, TouchableHighlight, View, StyleSheet, ImageBackground } from 'react-native'
+import { Text, TouchableOpacity, TouchableHighlight, View, StyleSheet, ImageBackground, ImageBackgroundComponent } from 'react-native'
 import { Button } from 'react-native-elements';
 import Modal from 'react-native-modal'
 import ImagePicker from "../Forms/ImagePicker"
 import { Feather } from '@expo/vector-icons'; 
+import { Entypo } from '@expo/vector-icons';
 import { onChange } from 'react-native-reanimated';
  // 4.1.1
  const colors = require("../Colors")
@@ -31,12 +32,13 @@ import { onChange } from 'react-native-reanimated';
         marginTop: 22
       },
       modalView: {
-        height: 200,
+        justifyContent: "space-evenly",
         width: "80%",
+        height: 150,
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
-        padding: 35,
+        padding: 15,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
@@ -61,74 +63,50 @@ import { onChange } from 'react-native-reanimated';
       modalText: {
         marginBottom: 15,
         textAlign: "center"
-      }
+      },
 })
 
-export default function ImageCameraModal({navigation, route, editable, cameraUri, onChange}) {
-
-  var image = (typeof route.params != "undefined") ? route.params.image : null;
-
-//console.log(image)    
+export default function ImageCameraModal({navigation, route, editable}) {
+  console.log("route.params", route.params)
+  const { yachtObj, image } = route.params;
   const [isModalVisible, toggleModal] = useState(false);
-  //console.log("received", image)
-  const [imageUri, setImageUri] = (typeof route.params != "undefined") ? useState(route.params.image) : useState(null);
-  console.log(imageUri)
-  const showImageCallback = (uri) => 
+  const [imageUri, setImageUri] = useState({camera: image, gallery: null, downloaded: yachtObj != null ? yachtObj.url : null });
+
+  const showImageCallback = (cameraUri, galleryUri) => 
   {
-    console.log("21342545")
-    toggleModal(false)
-    image = null;
-    console.log("uri",uri)
-    setImageUri(uri)
-    //onChange(uri)
+    toggleModal(false);
+    setImageUri({camera: cameraUri, gallery: galleryUri, downloaded: null})
   }
   
   let MainView;
-  
-    if(imageUri != null){
-      console.log(1)
-        MainView =
-        () => {return (
-        <ImageBackground source={{ uri: imageUri }} style={styles.imageContainer}>
+ console.log(imageUri);
+  const source = [imageUri.camera, imageUri.gallery, imageUri.downloaded].filter(Boolean)[0];
 
-          {
-            editable &&
-            <Button
-            icon={
-                <Feather name="trash-2" size={24} color="white" />
-            }
-            buttonStyle={styles.trashButton}
-            onPress={()=>{showImageCallback(null)}}
-            />
-          }
-        </ImageBackground>
-        )};
-    }
-    else if(imageUri == null && image != null) {
-      console.log(2)
-      MainView =
-        () => {return (
-        <ImageBackground source={{ uri: image }} style={styles.imageContainer}>
+  console.log("source", source)
 
-          {
-            editable &&
-            <Button
-            icon={
-                <Feather name="trash-2" size={24} color="white" />
-            }
-            buttonStyle={styles.trashButton}
-            onPress={()=>{showImageCallback(null)}}
-            />
-          }
-        </ImageBackground>)}
-    }
-    else{
-      console.log(3)
+    if(typeof source == "undefined"){
         MainView = () => { return (
             <TouchableOpacity style={styles.container} onPress={() => {toggleModal(true)}}>
                 <Text style={styles.text}>Add new photo</Text>
             </TouchableOpacity>
         )};
+    }
+    else {
+      MainView =
+      () => {return (
+      <ImageBackground source={{uri: source}} style={styles.imageContainer}>
+        {
+          editable &&
+          <Button
+          icon={
+              <Feather name="trash-2" size={24} color="white" />
+          }
+          buttonStyle={styles.trashButton}
+          onPress={()=>{showImageCallback(null, null)}}
+          />
+        }
+      </ImageBackground>
+      )}; 
     }
 
     return (
@@ -144,24 +122,26 @@ export default function ImageCameraModal({navigation, route, editable, cameraUri
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <ImagePicker hideModal={toggleModal} callbackFunc={showImageCallback}></ImagePicker>
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "gray" }}
+              <ImagePicker hideModal={toggleModal} callbackFunc={showImageCallback}></ImagePicker>
+              <Button
+                titleStyle={{fontSize: 12}}
+                type="outline"
+                onPress={() => {
+                  toggleModal(false)
+                  navigation.navigate("Take a photo", {callbackFunc: showImageCallback})
+                }}
+                title="FROM CAMERA"
+              ></Button>
+            
+            
+            <Button
               onPress={() => {
                 toggleModal(false)
-                navigation.navigate("Take a photo")
               }}
+              type="clear"
+              icon={<Entypo name="chevron-thin-down" size={16} color={colors.brandMarine} />}
             >
-              <Text style={styles.textStyle}>Take a photo</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-              onPress={() => {
-                toggleModal(false)
-              }}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </TouchableHighlight>
+            </Button>
           </View>
         </View>
       </Modal>

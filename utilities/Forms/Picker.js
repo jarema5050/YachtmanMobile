@@ -33,10 +33,18 @@ export default React.forwardRef((props, ref) => {
     if(props.editable == false) {
       return(<View style={styles.inputContainer}>
         <Text style={styles.label}>{props.name}</Text>
-        <TextInput
-          style={styles.input}
-          value={""}
-          editable={props.editable}
+        <Controller
+              control={props.control}
+              onFocus={()=>{ref.current.focus()}}
+              render={({ onChange, onBlur, value }) => (
+                <TextInput
+                  style={styles.input}
+                  value={value}
+                  editable={props.editable}
+                />
+              )}
+              name={props.name}
+              defaultValue=""
         />
       </View>);
     }

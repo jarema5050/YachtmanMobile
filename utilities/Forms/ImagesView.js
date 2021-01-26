@@ -51,7 +51,10 @@ export default class ImagesView extends React.Component {
                     justifyContent: 'space-around',
                     alignItems: 'stretch'}}
                 >
-                    <Button buttonStyle ={styles.buttonRegister} titleStyle={styles.buttonTitle} title="Choose photo" onPress={() => {this.props.navigation.navigate("Yacht edit", {image: this.props.photo.uri})}}></Button>
+                    <Button buttonStyle ={styles.buttonRegister} titleStyle={styles.buttonTitle} title="Choose photo" onPress={() => {
+                        this.props.callbackFunc(this.props.photo.uri, null)
+                        this.props.navigation.navigate("Yacht edit")
+                    }}></Button>
                     <Button buttonStyle ={styles.buttonRegister} titleStyle={styles.buttonTitle} title="Discard" onPress={() => {this.props.discardFunc()}}></Button>
                 </View>
             </View>

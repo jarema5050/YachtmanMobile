@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     }
   });
 
-export default function CameraView({navigation, route}) {
+export default function CameraView({callbackFunc, navigation, route}) {
 var camera;
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -89,6 +89,6 @@ var camera;
   }
   
   else{
-    return <ImagesView navigation={navigation} discardFunc={newPhotoFunc} photo={photo}/>;
+    return <ImagesView callbackFunc={route.params.callbackFunc} navigation={navigation} discardFunc={newPhotoFunc} photo={photo}/>;
 }
 }

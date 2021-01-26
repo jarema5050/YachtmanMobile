@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Image, View, Platform } from 'react-native';
+import { Image, View, Platform } from 'react-native';
+import { Button } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons'; 
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
+import { color } from 'react-native-reanimated';
+import { brandMarine } from '../Colors';
 
+
+const colors = require("../Colors")
 export default function ImPicker({callbackFunc, hideModal}) {
 
   useEffect(() => {
@@ -26,13 +32,13 @@ export default function ImPicker({callbackFunc, hideModal}) {
     });
 
     if (!result.cancelled) {
-      callbackFunc(result.uri);
+      callbackFunc(null, result.uri);
     }
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Pick an image from camera roll" onPress={() =>{pickImage()}} />
+    <View style={{ flex: 1 }}>
+      <Button title="FROM IMAGES" titleStyle={{fontSize: 12}} type="outline" onPress={() =>{pickImage()}} />
       {/* image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />  */}
     </View>
   );
