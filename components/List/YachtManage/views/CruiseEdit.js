@@ -213,6 +213,8 @@ class MultiSelectExample extends Component {
           items={formData.LanguageSelector}
           uniqueKey="id"
           displayKey="name"
+          searchInputPlaceholderText="Select languages"
+          selectText="Select languages"
          // onSelectedItemsChange={this.onSelectedItemsChange}
         />
       </View>
