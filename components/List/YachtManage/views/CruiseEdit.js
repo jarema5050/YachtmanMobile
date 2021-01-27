@@ -141,25 +141,28 @@ export default function CruiseEditView({ navigation , route }) {
     };
     const editable = mode != viewModes.view
 
+
 /* start file from Multiselect */
 /*
-class MultiSelectExample extends Component {
+function Selektor(props){
 
-  state = {
-    selectedItems : [];
-  };
-
-  
-  onSelectedItemsChange = selectedItems => {
-    this.setState({ selectedItems });
-  };
-
-  render() {
-    const { selectedItems } = this.state;
-
+    const {selectedItems, setselectedItems} = useState(null);
+      
+    useEffect(() => {
+      function onSelectedItemsChange(status){
+        setselectedItems(status.selectedItems);
+      }
+    }
+    
+    )
+      onSelectedItemsChange = selectedItems => {
+        this.setState({ selectedItems });
+      }
+      selectedItems = null;
 */
 
 /* end files Multiselect */
+
     
     /* start file from calendar: szczegoły na samym dole */
    /*
@@ -191,7 +194,8 @@ class MultiSelectExample extends Component {
     const endDate = selectedEndDate ? selectedEndDate.toString() : '';
     */
   /* end files calendar */
-      
+
+    
     return (
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
@@ -215,7 +219,7 @@ class MultiSelectExample extends Component {
           displayKey="name"
           searchInputPlaceholderText="Select languages"
           selectText="Select languages"
-         // onSelectedItemsChange={this.onSelectedItemsChange}
+        //onSelectedItemsChange={this.onSelectedItemsChange}
         />
       </View>
       
@@ -239,20 +243,14 @@ class MultiSelectExample extends Component {
         </SafeAreaView>
   );
         
-      }
-    
+}
     
       /*
-      <Picker ref={typeInputRef} errors={errors} control={control} data={formData.yachtTypeData} name={formTitles.yachtType} required={true} editable={editable}></Picker>
-      <NumericInput ref={lengthInputRef} name={formTitles.yachtLength} errors={errors} control={control} maxLength={3} required={true} editable={editable}></NumericInput>
-      <Picker ref={yearInputRef} errors={errors} control={control} data={formData.yearFactory(1900)} name={formTitles.yearBuilt} required={true} editable={editable}></Picker>
-      <NumericInput ref={capacityInputRef} name={formTitles.humanCapacity} errors={errors} control={control} maxLength={3} required={true} editable={editable}></NumericInput>
-      
-      Tam wyżej starałeś się przerobić na hooki i wyszło mi jak wyszło, jeszcze nie mam takiej
+      Tam wyżej starałem się przerobić na hooki i wyszło mi jak wyszło, jeszcze nie mam takiej
       wprawy by takie skomplikowane klasy przerabiać na funkcje. Poniżej oryginał kodu
       container przerobiłem na "box"
       
-
+Kalendarz początek
       import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -320,7 +318,28 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
 });
+      Kalendarz koniec
+
+      Multiselect początek
+
+class MultiSelectExample extends Component {
+
+  state = {
+    selectedItems : [];
+  };
+
+  
+  onSelectedItemsChange = selectedItems => {
+    this.setState({ selectedItems });
+  };
+
+  render() {
+    const { selectedItems } = this.state;
+
+Multiselect koniec
+
+
+*/
       
       
       
-      */
