@@ -31,6 +31,7 @@ export default class LoginPage extends React.Component {
     signIn = async () => {
         // prepares the login request.
         this.setState({loading: true});
+        console.log({useProxy});
         const redirectUri = AuthSession.makeRedirectUri({ useProxy });
         const authenticationOptions = {
             redirectUri: redirectUri,
@@ -47,6 +48,7 @@ export default class LoginPage extends React.Component {
         };
         const discovery = await AuthSession.fetchDiscoveryAsync(auth0_domain);
         const request = await AuthSession.loadAsync(authenticationOptions, discovery);
+        console.log("request",request)
         const code_verifier = request.codeVerifier;
 
         // prompts the user for login

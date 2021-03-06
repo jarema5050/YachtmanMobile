@@ -66,7 +66,7 @@ import { onChange } from 'react-native-reanimated';
       },
 })
 
-export default function ImageCameraModal({navigation, route, editable}) {
+export default function ImageCameraModal({navigation, route, editable, setImageBase64}) {
   console.log("route.params", route.params)
   const { yachtObj, image } = route.params;
   const [isModalVisible, toggleModal] = useState(false);

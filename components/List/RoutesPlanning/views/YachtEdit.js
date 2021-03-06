@@ -306,5 +306,3 @@ export default function YachtEditView({ navigation , route }) {
       );
 }
 
-
-

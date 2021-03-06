@@ -6,7 +6,6 @@ const colors = require("../utilities/Colors")
 
 
 const Drawer = createDrawerNavigator();
-
 export default function DrawerNav({screensArray, customContent}) {
 
   return (
